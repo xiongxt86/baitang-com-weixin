@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"  
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.1.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+    http://www.springframework.org/schema/mvc  
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+	  <description>Spring公共配置文件 </description>
+	<!-- Maps '/' requests to the 'home' view -->
+	<!-- <mvc: view-controller path="/" view-name="index"/> -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+
+<!-- 	<resources mapping="/views/**" location="/views/" /> -->
+	<context:component-scan base-package="com.hdsx.framework">
+		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect" />
+	</context:component-scan>
+	<context:annotation-config />
+	<context:property-placeholder location="classpath:properties/jdbc.properties" />
+
+	<!-- 启动 @AspectJ 支持 -->
+	<aop:aspectj-autoproxy />
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">   
+	    <property name="url" value="${jdbc.url}" />  
+	    <property name="username" value="${jdbc.username}" />  
+	    <property name="password" value="${jdbc.password}" />  
+	    <property name="filters" value="stat" />  
+	    <property name="maxActive" value="20" />  
+	    <property name="initialSize" value="5" />  
+	    <property name="maxWait" value="60000" />  
+	    <property name="minIdle" value="2" />  
+	    <property name="timeBetweenEvictionRunsMillis" value="60000" />  
+	    <property name="minEvictableIdleTimeMillis" value="300000" />  
+	    <property name="validationQuery" value="SELECT 'x'" />  
+	    <property name="testWhileIdle" value="true" />  
+	    <property name="testOnBorrow" value="false" />  
+	    <property name="testOnReturn" value="false" />  
+	    <property name="poolPreparedStatements" value="true" />  
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="50" />  
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation">
+			<value>classpath:mybatis-config.xml</value>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 注解式事务添加 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.hdsx.framework" />
+		<property name="annotationClass" value="com.hdsx.framework.dao.Mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+    in the /views directory -->
+  <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <beans:property name="prefix" value="/views/" />
+    <beans:property name="suffix" value=".jsp" />
+  </beans:bean>
+  <!-- Only needed because we require fileupload in the org.springframework.samples.mvc.fileupload package -->
+  <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+</beans>
+
