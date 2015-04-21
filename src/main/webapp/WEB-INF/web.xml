@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+	<!-- 编码字符集统一为UTF-8（过滤器） -->
+	<filter>
+		<display-name>encodingFilter</display-name>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>DruidWebStatFilter</filter-name>
+    <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+    <init-param>
+      <param-name>exclusions</param-name>
+      <!-- 下载也需要查询文件路径，版本等信息 -->
+      <param-value>*.do,*.js,*.gif,*.jpg,*.png,*.css,*.ico,*.jsp,/druid/* <!-- ,/download/* --></param-value>
+    </init-param>
+    <init-param>
+      <param-name>sessionStatMaxCount</param-name>
+      <param-value>2000</param-value>
+    </init-param>
+    <init-param>
+      <param-name>sessionStatEnable</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>principalSessionName</param-name>
+     <!--  需要string类型，如果不是使用toString() -->
+      <param-value>session_user_name</param-value>
+    </init-param>
+    <init-param>
+      <param-name>profileEnable</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>DruidWebStatFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <servlet-name>DruidStatView</servlet-name>
+    <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+    <init-param>
+      <param-name>resetEnable</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>loginUsername</param-name>
+      <param-value>hdsx</param-value>
+    </init-param>
+    <init-param>
+      <param-name>loginPassword</param-name>
+      <param-value>hdsx</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DruidStatView</servlet-name>
+    <url-pattern>/druid/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>springMVC</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:applicationContext.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+		<servlet-name>springMVC</servlet-name>
+		<url-pattern>*.json</url-pattern>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.xml</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
+ </servlet-mapping>
+ 
+ <!-- 预设：6小时内错误次数多于6次则锁定账号 -->
+ <context-param>
+ <!-- 锁定方式 -->
+ 	<param-name>lock</param-name>
+ 	<!-- value:1：隔天解锁 2：间隔时间 -->
+ 	<param-value>2</param-value>
+ </context-param>
+  <context-param>
+ 	<param-name>time</param-name>
+ 	<!-- value:锁定间隔时间（小时） -->
+ 	<param-value>6</param-value>
+ </context-param>
+ <context-param>
+ 	<param-name>error</param-name>
+ 	<!-- value:锁定错误次数 -->
+ 	<param-value>6</param-value>
+ </context-param>
+  <context-param>
+  <!-- 解锁间隔时间 -->
+ 	<param-name>unlock</param-name>
+ 	<!-- value:单位（天）-->
+ 	<param-value>90</param-value>
+ </context-param>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
