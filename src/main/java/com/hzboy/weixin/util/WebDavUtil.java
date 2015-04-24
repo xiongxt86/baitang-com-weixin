@@ -1,7 +1,5 @@
 package com.hzboy.weixin.util;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,36 +29,35 @@ import core.StringUtile;
  *
  */
 public class WebDavUtil {
-	private static String domain_put = "http://localhost:7072/";// 上传删除
-	private static String domain_down ="http://localhost:7071/";// 下载浏览
-	private static String domain_main = "http://localhost:8080/";//静态资源和转交请求给tomcat
-	private static String domain_proxy = "http://localhost:8085/";//代理地址
-	private static String domain_root = "D:/nginx_test/html/";
+	public static final String DOMAIN_UP = "http://localhost:7072/";// 上传删除
+	public static final String DOMAIN_MAIN = "http://localhost:8080/";//静态资源和转交请求给tomcat
+	public static final String DOMAIN_PROXY = "http://localhost:8085/";//代理地址
+	public static final String DOMAIN_ROOT = "D:/nginx_test/html/";
 	
 	/**
 	 * 响应成功
 	 */
-	private static final int  RESPONSE_SUCCESS = 201;
+	public static final int  RESPONSE_SUCCESS = 201;
 	/**
 	 * 文件已经存在
 	 */
-	private static final int  FILE_EXIST = 204;
+	public static final int  FILE_EXIST = 204;
 	/**
 	 * 删除成功
 	 */
-	private static final int  DELETE_OK = 204;
+	public static final int  DELETE_OK = 204;
 	/**
 	 * 没有可删除资源
 	 */
-	private static final int  DELETE_NONE = 404;
+	public static final int  DELETE_NONE = 404;
 	/**
 	 * 文件夹已经存在
 	 */
-	private static final int  FOLDER_EXIST = 405;
+	public static final int  FOLDER_EXIST = 405;
 	/**
 	 * 响应失败
 	 */
-	private static final int  RESPONSE_FAIL = 0;
+	public static final int  RESPONSE_FAIL = 0;
 	/**
 	 * 创建客户端
 	 * @param username 用户名
