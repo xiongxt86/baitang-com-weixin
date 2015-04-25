@@ -29,6 +29,9 @@
     <!-- session工厂 -->
     <bean id="sessionFactory"
         class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <!-- <property name="configLocation">  
+            <value>classpath:config/hibernate.cfg.xml</value>  
+        </property>  -->
         <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan" value="com.hzboy.weixin" />
         <property name="hibernateProperties">
