@@ -20,7 +20,7 @@
 			<MaxFileSize>10MB</MaxFileSize>
 		</triggeringPolicy>
 	</appender>
-	<root level="DEBUG">
+	<root level="ERROR">
 		<appender-ref ref="stdout" />
 		<appender-ref ref="R" />
 	</root>
