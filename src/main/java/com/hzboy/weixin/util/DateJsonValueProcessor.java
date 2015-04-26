@@ -4,15 +4,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class DateJsonValueProcessor implements JsonValueProcessor {
 	/** * logger. */
-	private static Log logger = LogFactory.getLog(DateJsonValueProcessor.class);
+	private static Logger logger = LoggerFactory.getLogger(DateJsonValueProcessor.class);
 
 	/** * 默认的日期转换格式. */
 	public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
@@ -30,7 +31,7 @@ public class DateJsonValueProcessor implements JsonValueProcessor {
 		try {
 			dateFormat = new SimpleDateFormat(datePattern);
 		} catch (Exception ex) {
-			logger.info(ex);
+			logger.info(ex.getMessage());
 			dateFormat = new SimpleDateFormat(DEFAULT_DATE_PATTERN);
 		}
 	}
