@@ -17,65 +17,65 @@
     http://www.springframework.org/schema/mvc/spring-mvc.xsd  
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
-
+    
 	  <description>Spring公共配置文件 </description>
 	<!-- Maps '/' requests to the 'home' view -->
 	<!-- <mvc: view-controller path="/" view-name="index"/> -->
 
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
-
-<!-- 	<resources mapping="/views/**" location="/views/" /> -->
-	<context:component-scan base-package="com.hdsx.framework">
+	<!-- Spring MVC注释 @Controller -->
+	<!-- <mvc:annotation-driven /> -->
+	<!-- 默认的注解映射的支持 -->  
+   <mvc:annotation-driven />
+<!--    <mvc:annotation-driven validator="validator"/>
+    以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册  
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">  
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>  
+       如果不加默认到 使用classpath下的 ValidationMessages.properties  
+   		<property name="validationMessageSource" ref="messageSource"/>   
+    </bean>  
+       
+    国际化的消息资源文件（本系统中主要用于显示/错误消息定制）  
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">  
+        <property name="basenames">  
+            <list>  
+                在web环境中一定要定位到classpath 否则默认到当前web应用下找   
+                <value>classpath:messages</value>  
+                <value>classpath:ValidationMessages</value>  
+            </list>  
+        </property>  
+        <property name="useCodeAsDefaultMessage" value="false"/>  
+        <property name="defaultEncoding" value="UTF-8"/>  
+        <property name="cacheSeconds" value="60"/>  
+    </bean> -->
+    
+	<!-- 配置过滤 -->
+    <mvc:interceptors> 
+        <!-- 开启openSessionInView -->
+        <bean class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">  
+          <property name="sessionFactory" ref="sessionFactory" />  
+        </bean>
+        <!-- 自定义的权限拦截验证，如果不定义 mvc:mapping path 将拦截所有的URL请求 -->
+        <!-- <bean class="com.hzboy.weixin.auth.AuthInterceptor"></bean> -->
+    </mvc:interceptors>
+	<!-- spring注释  -->
+	<!-- AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor、
+	PersistenceAnnotationBeanPostProcessor 以及 RequiredAnnotationBeanPostProcessor 这 4 个BeanPostProcessor-->
+	<!-- <context:annotation-config /> -->
+	
+	<!-- context:component-scan 自动包含了 <context:annotation-config /> 的配置-->
+	<context:component-scan base-package="com.hzboy.weixin">
 		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect" />
 	</context:component-scan>
-	<context:annotation-config />
-	<context:property-placeholder location="classpath:properties/jdbc.properties" />
-
-	<!-- 启动 @AspectJ 支持 -->
+	<!-- <beans>
+         <import resource="applicationContext-hibernate.xml"/>
+    </beans> -->
+	<!-- 启动 @AspectJ 支持,用于指定代理技术，默认cglib -->
 	<aop:aspectj-autoproxy />
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">   
-	    <property name="url" value="${jdbc.url}" />  
-	    <property name="username" value="${jdbc.username}" />  
-	    <property name="password" value="${jdbc.password}" />  
-	    <property name="filters" value="stat" />  
-	    <property name="maxActive" value="20" />  
-	    <property name="initialSize" value="5" />  
-	    <property name="maxWait" value="60000" />  
-	    <property name="minIdle" value="2" />  
-	    <property name="timeBetweenEvictionRunsMillis" value="60000" />  
-	    <property name="minEvictableIdleTimeMillis" value="300000" />  
-	    <property name="validationQuery" value="SELECT 'x'" />  
-	    <property name="testWhileIdle" value="true" />  
-	    <property name="testOnBorrow" value="false" />  
-	    <property name="testOnReturn" value="false" />  
-	    <property name="poolPreparedStatements" value="true" />  
-	    <property name="maxPoolPreparedStatementPerConnectionSize" value="50" />  
-	</bean>
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation">
-			<value>classpath:mybatis-config.xml</value>
-		</property>
-	</bean>
-
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	<!-- 注解式事务添加 -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
-
-	<!-- scan for mappers and let them be autowired -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.hdsx.framework" />
-		<property name="annotationClass" value="com.hdsx.framework.dao.Mapper" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-	</bean>
-	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
     in the /views directory -->
   <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <beans:property name="prefix" value="/views/" />
+    <!-- <beans:property name="prefix" value="/views/" /> -->
     <beans:property name="suffix" value=".jsp" />
   </beans:bean>
   <!-- Only needed because we require fileupload in the org.springframework.samples.mvc.fileupload package -->

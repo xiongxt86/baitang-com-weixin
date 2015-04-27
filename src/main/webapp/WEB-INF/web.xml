@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	version="3.0">
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml,classpath:infrastructure.xml</param-value>
-	</context-param>
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<!-- 编码字符集统一为UTF-8（过滤器） -->
 	<!-- Character Filter -->
 	<filter>
@@ -26,56 +21,47 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	<!-- hibernate事务范围 -->
-	<filter>
-		<filter-name>hibernateFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>hibernateFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
-	<!-- Spring Listener -->
-	<listener>
+  	<!-- SpringMVC -->
+	<servlet>
+		<servlet-name>springMVC</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath*:applicationContext*.xml</param-value>
+			<!-- <param-value>classpath:applicationContext.xml,classpath:applicationContext-hibernate.xml</param-value> -->
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springMVC</servlet-name>
+		<url-pattern>*.json</url-pattern>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.action</url-pattern>
+		<url-pattern>*.xml</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
+		<url-pattern>/index/*</url-pattern>
+ 	</servlet-mapping>
+ 	<!-- Spring Listener -->
+	<!-- <listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:applicationContext*.xml</param-value>
-	</context-param>
+	</listener> -->
 	<!-- request注入 -->
 	<listener>
 	    <listener-class>    
 	           org.springframework.web.context.request.RequestContextListener    
 	    </listener-class>
   	</listener>
-
-	<!-- SpringMVC -->
-	<servlet>
-		<servlet-name>dispatcher</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>dispatcher</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	    <servlet-name>dispatcher</servlet-name>
-	    <url-pattern>*.action</url-pattern>
-  	</servlet-mapping>
-	<servlet-mapping>
-    	<servlet-name>dispatcher</servlet-name>
-    	<url-pattern>/auth/*</url-pattern>
-  	</servlet-mapping>
-  	<servlet-mapping>
-	    <servlet-name>dispatcher</servlet-name>
-	    <url-pattern>/index/*</url-pattern>
-  	</servlet-mapping>
-
+	<!-- hibernate事务范围  转到 在springMVC中配置-->
+	<!-- <filter>
+		<filter-name>hibernateFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>hibernateFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> -->
 	<!-- 默认设置 -->
-	<error-page>
+	<!-- <error-page>
 		<exception-type>java.lang.Throwable</exception-type>
 		<location>/WEB-INF/pages/error/unchecked/500.html</location>
 	</error-page>
@@ -86,7 +72,7 @@
 	<error-page>
 		<error-code>404</error-code>
 		<location>/WEB-INF/pages/error/unchecked/404.html</location>
-	</error-page>
+	</error-page> -->
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
