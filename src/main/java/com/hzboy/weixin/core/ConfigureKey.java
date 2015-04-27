@@ -8,6 +8,6 @@ package com.hzboy.weixin.core;
  *
  */
 public enum ConfigureKey {
-	DOMAIN_UP(""),
-	DOMAIN_UP("");
+//	DOMAIN_UP(""),
+//	DOMAIN_UP("");
 }

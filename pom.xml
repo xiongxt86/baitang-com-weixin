@@ -53,6 +53,12 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- custom util -->
+		<dependency>
+			<groupId>com.xiongxt</groupId>
+			<artifactId>util</artifactId>
+			<version>0.0.2</version>
+		</dependency>
 		<!-- Spring -->
 	    <dependency>
 	        <groupId>org.springframework</groupId>
@@ -229,12 +235,6 @@
 			<version>3.9</version>
 		</dependency>
 		
-		<!-- custom util -->
-		<dependency>
-			<groupId>com.xiongxt</groupId>
-			<artifactId>util</artifactId>
-			<version>0.0.1</version>
-		</dependency>
 		<!-- 数据验证 -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
