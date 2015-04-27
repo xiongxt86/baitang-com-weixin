@@ -179,7 +179,7 @@ public class WebDavUtil {
 	}
 	
 	public static void main(String[] args) {
-		boolean files = getFiles("http://localhost:7072/test");
+//		boolean files = getFiles("http://localhost:7072/test");
 //		boolean createFolder = createFolder(DOMAIN_UP + "test/test/");
 //		System.out.println(createFolder);
 //		boolean removeFile = removeFile(domain_put + "test/");
