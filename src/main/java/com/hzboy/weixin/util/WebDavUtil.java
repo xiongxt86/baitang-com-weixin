@@ -29,11 +29,6 @@ import core.StringUtile;
  *
  */
 public class WebDavUtil {
-	public static final String DOMAIN_UP = "http://localhost:7072/";// 上传删除
-	public static final String DOMAIN_MAIN = "http://localhost:8080/";//静态资源和转交请求给tomcat
-	public static final String DOMAIN_PROXY = "http://localhost:8085/";//代理地址
-	public static final String DOMAIN_ROOT = "D:/nginx_test/html/";
-	
 	/**
 	 * 响应成功
 	 */
@@ -76,7 +71,7 @@ public class WebDavUtil {
 		return createClient("","");
 	}
 	/**
-	 * 创建文件夹
+	 * 创建文件夹（只能创建一级）
 	 * @param folder
 	 * @return 是否存在文件夹（创建或者已有）
 	 */
@@ -185,7 +180,7 @@ public class WebDavUtil {
 	
 	public static void main(String[] args) {
 		boolean files = getFiles("http://localhost:7072/test");
-//		boolean createFolder = createFolder(domain_put + "test/test/");
+//		boolean createFolder = createFolder(DOMAIN_UP + "test/test/");
 //		System.out.println(createFolder);
 //		boolean removeFile = removeFile(domain_put + "test/");
 //		System.out.println(removeFile);
